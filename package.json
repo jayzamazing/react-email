@@ -1,6 +1,6 @@
 {
   "name": "react-email",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A simple mockup of an email reader that uses react router.",
   "main": "public/js/index.js",
   "scripts": {

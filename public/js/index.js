@@ -39,6 +39,16 @@ var EMAILS = {
         }
     }
 };
+/* component that displays the names of the folders
+* @return html and filled in variables
+*/
+var Folder = function(props) {
+  return (
+    <div>
+      {props.folder}
+    </div>
+  );
+};
 /* component that displays data for a specific email
 * @return html and filled in variables
 */
@@ -53,6 +63,24 @@ var Email = function(props) {
     </div>
   );
 };
+/* component that sorts through the data, calls folder component and passes data to
+* folders component
+* @return folders object
+*/
+var FolderList = function(props) {
+  var folders = Object.keys(props.emails).map(function(folderName, index) {
+    return (
+      <li key={index}>
+        <Folder folder={folderName} />
+      </li>
+    );
+  });
+  return (
+    <ul>
+      {folders}
+    </ul>
+  );
+};
 /* component that sorts through the data, calls email component and passes data to
 * email component
 * @return emails object
@@ -65,7 +93,8 @@ var EmailList = function(props) {
     //return function that calls email component and passes data to it
     return (
       <li key={index}>
-        <Email id={email.id} from={email.from} to={email.to} title={email.title} content={email.content} />
+        <Email id={email.id} from={email.from} to={email.to}
+          title={email.title} content={email.content} />
       </li>
     );
   });
@@ -80,3 +109,13 @@ var EmailList = function(props) {
 var EmailListContainer = function() {
   return <EmailList emails={EMAILS} />;
 };
+//variable that deals with the routing for the app
+var routes = (
+  <Router history={hashHistory}>
+    <Route path="/emails" component={EmailListContainer} />
+  </Router>
+);
+//Event listener that waits for dom to be loader then renders
+document.addEventListener('DOMContentLoaded', function() {
+  ReactDOM.render(routes, document.getElementById('app'));
+});
