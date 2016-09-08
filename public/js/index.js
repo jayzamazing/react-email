@@ -4,6 +4,7 @@ var router = require('react-router');
 var Router = router.Router;
 var Route = router.Route;
 var hashHistory = router.hashHistory;
+var IndexRoute = router.IndexRoute;
 //data object to display
 var EMAILS = {
   inbox: {
@@ -67,11 +68,11 @@ var Folder = function(props) {
 * email component
 * @return emails object
 */
-var EmailList = function(props) {
+var EmailContents = function(props) {
   //restructure data
-  var emails = Object.keys(props.emails).map(function(emailId, index) {
+  var emails = Object.keys(props.emails['spam']).map(function(emailId, index) {//TODO remove hard coded values
     //set current email
-    var email = props.emails[emailId];
+    var email = props.emails['spam'][emailId];//TODO remove hard coded values
     //return function that calls email component and passes data to it
     return (
       <li key={index}>
@@ -105,8 +106,8 @@ var FolderListContainer = function() {
   return <FolderList emails={EMAILS} />
 };
 //component to call email list component and pass emails to it
-var EmailListContainer = function() {
-  return <EmailList emails={EMAILS} />;
+var EmailContentsContainer = function() {
+  return <EmailContents emails={EMAILS} />;
 };
 var App = function(props) {
   return (
@@ -127,7 +128,9 @@ var App = function(props) {
 //variable that deals with the routing for the app
 var routes = (
   <Router history={hashHistory}>
-    <Route path="/temp" component={App} />
+    <Route path="/temp" component={App}>
+      <IndexRoute component={EmailListContainer} />
+    </Route>
   </Router>
 );
 //Event listener that waits for dom to be loader then renders
