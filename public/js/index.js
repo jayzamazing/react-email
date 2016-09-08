@@ -39,16 +39,6 @@ var EMAILS = {
         }
     }
 };
-/* component that displays the names of the folders
-* @return html and filled in variables
-*/
-var Folder = function(props) {
-  return (
-    <div>
-      {props.folder}
-    </div>
-  );
-};
 /* component that displays data for a specific email
 * @return html and filled in variables
 */
@@ -63,22 +53,14 @@ var Email = function(props) {
     </div>
   );
 };
-/* component that sorts through the data, calls folder component and passes data to
-* folders component
-* @return folders object
+/* component that displays data for a specific folder
+* @return html and filled in variables
 */
-var FolderList = function(props) {
-  var folders = Object.keys(props.emails).map(function(folderName, index) {
-    return (
-      <li key={index}>
-        <Folder folder={folderName} />
-      </li>
-    );
-  });
+var Folder = function(props) {
   return (
-    <ul>
-      {folders}
-    </ul>
+    <div>
+      <p>{props.folder}</p>
+    </div>
   );
 };
 /* component that sorts through the data, calls email component and passes data to
@@ -105,14 +87,47 @@ var EmailList = function(props) {
     </ul>
   );
 };
+var FolderList = function(props) {
+  var folders = Object.keys(props.emails).map(function(folderName, index) {
+    return (
+      <li key={index}>
+        <Folder folder={folderName} />
+      </li>
+    );
+  });
+  return (
+    <ul>
+      {folders}
+    </ul>
+  )
+}
+var FolderListContainer = function() {
+  return <FolderList emails={EMAILS} />
+};
 //component to call email list component and pass emails to it
 var EmailListContainer = function() {
   return <EmailList emails={EMAILS} />;
 };
+var App = function(props) {
+  return (
+    <section>
+      <aside className="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+        <div>
+          <FolderListContainer />
+        </div>
+      </aside>
+      <section className="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+        <div>
+          {props.children}
+        </div>
+      </section>
+    </section>
+  );
+};
 //variable that deals with the routing for the app
 var routes = (
   <Router history={hashHistory}>
-    <Route path="/emails" component={EmailListContainer} />
+    <Route path="/temp" component={App} />
   </Router>
 );
 //Event listener that waits for dom to be loader then renders

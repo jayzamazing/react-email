@@ -1,6 +1,6 @@
 {
   "name": "react-email",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A simple mockup of an email reader that uses react router.",
   "main": "public/js/index.js",
   "scripts": {
@@ -50,6 +50,7 @@
   },
   "homepage": "https://github.com/jayzamazing/react-email#readme",
   "dependencies": {
+    "bootstrap": "^3.3.7",
     "react": "^15.3.1",
     "react-dom": "^15.3.1",
     "react-router": "^2.7.0"
