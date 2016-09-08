@@ -96,13 +96,13 @@ var EmailContentsList = function(props) {
 };
 var EmailTitleList = function(props) {
   //restructure data
-  var emailTitles = Object.keys(props.emails[props.mailbox]).map(function(emailId, index) {//TODO remove hard coded values
+  var emailTitles = Object.keys(props.emails[props.mailbox]).map(function(emailId, index) {
     //set current email
-    var email = props.emails[props.mailbox][emailId];//TODO remove hard coded values
+    var email = props.emails[props.mailbox][emailId];
     //return function that calls email component and passes data to it
     return (
       <li key={index}>
-        <EmailTitle id={email.id} from={email.from}
+        <EmailTitle folder={props.mailbox} id={email.id} from={email.from}
           title={email.title} />
       </li>
     );
@@ -133,7 +133,13 @@ var FolderListContainer = function() {
 };
 //component to call email list component and pass emails to it
 var EmailContentsContainer = function(props) {
-  return <EmailContentsList emails={EMAILS} emailId={(props.params.emailId).replace(':', '')} mailbox={(props.params.mailbox_name).replace(':', '')}/>;
+  return (
+    <div>
+      <h3>Contents</h3>
+        <EmailContentsList emails={EMAILS} emailId={(props.params.emailId).replace(':', '')}
+          mailbox={(props.params.mailbox_name).replace(':', '')}/>;
+    </div>
+  );
 };
 var EmailTitleListContainer = function(props) {
   return (
