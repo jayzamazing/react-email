@@ -54,6 +54,7 @@ var Email = function(props) {
     </div>
   );
 };
+
 /* component that displays data for a specific folder
 * @return html and filled in variables
 */
@@ -129,7 +130,7 @@ var App = function(props) {
 var routes = (
   <Router history={hashHistory}>
     <Route path="/temp" component={App}>
-      <IndexRoute component={EmailListContainer} />
+      <IndexRoute component={EmailContentsContainer} />
     </Route>
   </Router>
 );
