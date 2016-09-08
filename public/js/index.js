@@ -5,6 +5,7 @@ var Router = router.Router;
 var Route = router.Route;
 var hashHistory = router.hashHistory;
 var IndexRoute = router.IndexRoute;
+var Link = router.Link;
 //data object to display
 var EMAILS = {
   inbox: {
@@ -54,14 +55,25 @@ var Email = function(props) {
     </div>
   );
 };
-
+var EmailTitle = function(props) {
+  return (
+    <div>
+      <Link to={'/:' + props.folder + '/:' + props.id}>
+        <p>{props.from}</p>
+        <p>{props.title}</p>
+      </Link>
+    </div>
+  );
+};
 /* component that displays data for a specific folder
 * @return html and filled in variables
 */
 var Folder = function(props) {
   return (
     <div>
-      <p>{props.folder}</p>
+      <Link to={'/:' + props.folder}>
+        <p>{props.folder}</p>
+      </Link>
     </div>
   );
 };
@@ -69,23 +81,36 @@ var Folder = function(props) {
 * email component
 * @return emails object
 */
-var EmailContents = function(props) {
-  //restructure data
-  var emails = Object.keys(props.emails['spam']).map(function(emailId, index) {//TODO remove hard coded values
+var EmailContentsList = function(props) {
     //set current email
-    var email = props.emails['spam'][emailId];//TODO remove hard coded values
+    var email = props.emails[props.mailbox][props.emailId];
+  //return emails object
+  return (
+    <ul>
+      <li>
+        <Email id={email.id} from={email.from} to={email.to}
+          title={email.title} content={email.content} />
+      </li>
+    </ul>
+  );
+};
+var EmailTitleList = function(props) {
+  //restructure data
+  var emailTitles = Object.keys(props.emails[props.mailbox]).map(function(emailId, index) {//TODO remove hard coded values
+    //set current email
+    var email = props.emails[props.mailbox][emailId];//TODO remove hard coded values
     //return function that calls email component and passes data to it
     return (
       <li key={index}>
-        <Email id={email.id} from={email.from} to={email.to}
-          title={email.title} content={email.content} />
+        <EmailTitle id={email.id} from={email.from}
+          title={email.title} />
       </li>
     );
   });
   //return emails object
   return (
     <ul>
-      {emails}
+      {emailTitles}
     </ul>
   );
 };
@@ -104,17 +129,26 @@ var FolderList = function(props) {
   )
 }
 var FolderListContainer = function() {
-  return <FolderList emails={EMAILS} />
+  return <FolderList emails={EMAILS} />;
 };
 //component to call email list component and pass emails to it
-var EmailContentsContainer = function() {
-  return <EmailContents emails={EMAILS} />;
+var EmailContentsContainer = function(props) {
+  return <EmailContentsList emails={EMAILS} emailId={(props.params.emailId).replace(':', '')} mailbox={(props.params.mailbox_name).replace(':', '')}/>;
+};
+var EmailTitleListContainer = function(props) {
+  return (
+    <div>
+      <h3>Emails</h3>
+      <EmailTitleList emails={EMAILS} mailbox={(props.params.mailbox_name).replace(':', '')}/>
+    </div>
+  );
 };
 var App = function(props) {
   return (
     <section>
       <aside className="col-xs-12 col-sm-12 col-md-4 col-lg-4">
         <div>
+          <h3>Folders</h3>
           <FolderListContainer />
         </div>
       </aside>
@@ -129,8 +163,9 @@ var App = function(props) {
 //variable that deals with the routing for the app
 var routes = (
   <Router history={hashHistory}>
-    <Route path="/temp" component={App}>
-      <IndexRoute component={EmailContentsContainer} />
+    <Route path='/' component={App}>
+      <Route path='/:mailbox_name' component={EmailTitleListContainer} />
+      <Route path='/:mailbox_name/:emailId' component={EmailContentsContainer} />
     </Route>
   </Router>
 );
